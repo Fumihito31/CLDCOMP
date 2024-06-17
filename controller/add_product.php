@@ -1,36 +1,38 @@
+// controller/add_product.php
 <?php
-// Include database connection or establish it here
 include '../config/connection.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if all necessary form fields are set
     if (isset($_POST['categoryName'], $_POST['productName'], $_POST['price'])) {
-        // Sanitize input data
         $categoryName = mysqli_real_escape_string($connection, $_POST['categoryName']);
         $productName = mysqli_real_escape_string($connection, $_POST['productName']);
         $price = mysqli_real_escape_string($connection, $_POST['price']);
-        
-        // You might want to handle stock differently depending on your system's logic
 
-        // Use prepared statement to prevent SQL injection
-        $insertQuery = $connection->prepare("INSERT INTO product_list (category, name, price) VALUES (?, ?, ?)");
-        $insertQuery->bind_param("ssd", $categoryName, $productName, $price);
+        // Get the category ID
+        $categoryQuery = "SELECT id FROM categories WHERE category_name = '$categoryName'";
+        $categoryResult = mysqli_query($connection, $categoryQuery);
+        if ($categoryResult && mysqli_num_rows($categoryResult) > 0) {
+            $categoryRow = mysqli_fetch_assoc($categoryResult);
+            $categoryId = $categoryRow['id'];
 
-        if ($insertQuery->execute()) {
-            header("Location: ../product.php?category=". $categoryName."&status=added");
-            exit(); // Ensure script execution stops after redirection
+            // Insert product using category ID
+            $insertQuery = $connection->prepare("INSERT INTO product_list (category_id, name, price) VALUES (?, ?, ?)");
+            $insertQuery->bind_param("isd", $categoryId, $productName, $price);
+
+            if ($insertQuery->execute()) {
+                header("Location: ../product.php?category=". $categoryName."&status=added");
+                exit();
+            } else {
+                header("Location: ../product.php?category=". $categoryName."&status=error");
+            }
+
+            $insertQuery->close();
         } else {
-            header("Location: ../product.php?category=". $categoryName."&status=error");
-           
+            echo "Error: Category not found!";
         }
-
-        // Close prepared statement
-        $insertQuery->close();
     } else {
-        // Missing form fields
         echo "Error: All form fields are required!";
     }
 } else {
-    // Invalid request method
     echo "Error: Invalid request method!";
 }
 ?>
