@@ -7,14 +7,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $productName = mysqli_real_escape_string($connection, $_POST['productName']);
         $price = mysqli_real_escape_string($connection, $_POST['price']);
 
-        $insertQuery = $connection->prepare("INSERT INTO product_list (category, name, price) VALUES (?, ?, ?)");
-        $insertQuery->bind_param("ssd", $categoryName, $productName, $price);
+        // Default stock and last restock date
+        $stock = 0;  // Default stock value
+        $lastRestock = date("Y-m-d");
+
+        // Use prepared statement to prevent SQL injection
+        $insertQuery = $connection->prepare("INSERT INTO product_list (category, name, price, stock, last_restock) VALUES (?, ?, ?, ?, ?)");
+        $insertQuery->bind_param("ssdss", $categoryName, $productName, $price, $stock, $lastRestock);
 
         if ($insertQuery->execute()) {
-            header("Location: ../product.php?category=". $categoryName."&status=added");
+            header("Location: ../product.php?category=". urlencode($categoryName) . "&status=added");
             exit();
         } else {
-            header("Location: ../product.php?category=". $categoryName."&status=error");
+            header("Location: ../product.php?category=". urlencode($categoryName) . "&status=error");
+            exit();
         }
 
         $insertQuery->close();
