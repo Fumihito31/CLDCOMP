@@ -5,6 +5,11 @@ button {
   font-family: "Inter", sans-serif;
 }
 
+button.btn.btn-primary {
+    display: block; /* Ensure the button is displayed */
+    visibility: visible; /* Ensure the button is visible */
+}
+
 body {
             display: flex;
         }
