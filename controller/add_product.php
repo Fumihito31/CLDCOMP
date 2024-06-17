@@ -16,11 +16,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $insertQuery->bind_param("ssd", $categoryName, $productName, $price);
 
         if ($insertQuery->execute()) {
-            // Insert successful
-            echo "Product added successfully!";
+            header("Location: ../product.php?category=". $categoryName."&status=added");
+            exit(); // Ensure script execution stops after redirection
         } else {
-            // Error occurred
-            echo "Error adding product: " . $insertQuery->error;
+            header("Location: ../product.php?category=". $categoryName."&status=error");
+           
         }
 
         // Close prepared statement
