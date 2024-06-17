@@ -369,6 +369,12 @@ $(document).ready(function() {
                 } else if (status === 'error') {
                     statusModalBody.textContent = 'Error updating product.';
                 }
+                else if (status === 'added') {
+                    statusModalBody.textContent = 'Product added successfully!';
+                }else if (status === 'deleted') {
+                    statusModalBody.textContent = 'Product deleted successfully!';
+                }
+                
                 statusModal.show();
             }
         });
