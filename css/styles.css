@@ -1,0 +1,44 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
+
+body,
+button {
+  font-family: "Inter", sans-serif;
+}
+
+body {
+            display: flex;
+        }
+
+.navbar{
+  position: fixed;
+  height: 60px; /* full height minus navbar height */
+}
+        /* Sidebar styling */
+#sidebarMenu {
+            position: fixed;
+            top: 56px; /* height of the navbar */
+            left: 0;
+            width: 250px;
+            height: calc(100% - 56px); /* full height minus navbar height */
+            padding-top: 20px;
+            background-color: #f8f9fa;
+            overflow-x: hidden;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+}
+.logo{
+            margin-left: 50px;
+}
+.sidebar-button {
+            margin: 20px;
+            display: flex;
+            justify-content: center;
+}
+        /* Main content styling */
+main {
+            margin-left: 250px; /* width of the sidebar */
+            padding-top: 56px; /* height of the navbar */
+            width: 100%;
+}
